@@ -1,0 +1,9 @@
+[diff]
+	tool = vimdiff
+[difftool]
+	prompt = false
+[alias]
+	d = difftool
+[user]
+	email = hesham.safi.eldeen@gmail.com
+	name = heshamsafi

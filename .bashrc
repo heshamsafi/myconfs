@@ -63,7 +63,6 @@ alias rsy="rsync -av -P"
 #if [ -z ${C_INCLUDE_PATH+x} ]; then export C_INCLUDE_PATH=~/bin/include:~/src/Python-3.5.0b2; fi
 #if [ -z ${CPLUS_INCLUDE_PATH+x} ]; then export CPLUS_INCLUDE_PATH=~/bin/include:~/src/Python-3.5.0b2; fi
 export TERM=screen-256color
-export SSHPASS="sanofano59"
 ###-begin-leetcode-completions-###
 #
 # yargs command completion script
