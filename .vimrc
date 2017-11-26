@@ -19,8 +19,10 @@ filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
-Plugin 'Valloric/YouCompleteMe'
+Plugin 'VundleVim/Vundle.vim'
+"Plugin 'Valloric/YouCompleteMe'
 Plugin 'vim-syntastic/syntastic'
+Plugin 'davidhalter/jedi-vim'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
 filetype plugin on
@@ -29,6 +31,7 @@ set clipboard=unnamedplus
 "set conceallevel=2
 "set concealcursor=vin
 "set completeopt-=preview
+colorscheme koehler
 if &diff
 	colorscheme evening
 endif
