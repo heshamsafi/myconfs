@@ -15,7 +15,8 @@ local hotkeys_popup = require("awful.hotkeys_popup").widget
 require("awful.hotkeys_popup.keys")
 
 -- Load Debian menu entries
---require("debian.menu")
+local debian = require("debian.menu")
+local has_fdo, freedesktop = pcall(require, "freedesktop")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -50,8 +51,7 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 terminal = "gnome-terminal --hide-menubar"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
-
--- Default modkey.
+awful.spawn("xrandr --output HDMI-1 --mode 1920x1080")
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
@@ -104,10 +104,24 @@ myawesomemenu = {
    { "quit", function() awesome.quit() end}
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "open terminal", terminal }
-                                  }
-                        })
+local menu_awesome = { "awesome", myawesomemenu, beautiful.awesome_icon }
+local menu_terminal = { "open terminal", terminal }
+
+if has_fdo then
+    mymainmenu = freedesktop.menu.build({
+        before = { menu_awesome },
+        after =  { menu_terminal }
+    })
+else
+    mymainmenu = awful.menu({
+        items = {
+                  menu_awesome,
+                  { "Debian", debian.menu.Debian_menu.Debian },
+                  menu_terminal,
+                }
+    })
+end
+
 
 mylauncher = awful.widget.launcher({ image = beautiful.awesome_icon,
                                      menu = mymainmenu })
@@ -207,9 +221,6 @@ awful.screen.connect_for_each_screen(function(s)
     -- Create the wibox
     s.mywibox = awful.wibar({ position = "top", screen = s })
 
-    local battery_widget = require("battery-widget")
-    local battery = battery_widget({adapter = "BAT1"})
-
     -- Add widgets to the wibox
     s.mywibox:setup {
         layout = wibox.layout.align.horizontal,
@@ -225,7 +236,6 @@ awful.screen.connect_for_each_screen(function(s)
             mykeyboardlayout,
             wibox.widget.systray(),
             mytextclock,
-						battery.widget,
             s.mylayoutbox,
         },
     }
