@@ -1,0 +1,21 @@
+[user]
+	name = hhesham
+ 	email = hesham.safi.eldeen@gmail.com
+[alias]
+  droot = "!f() { git diff $(git merge-base $1 $2) $1; }; f"
+[core]
+	editor = nvim
+[difftool]
+    prompt = true
+[diff]
+    tool = nvimdiff
+[difftool "nvimdiff"]
+    cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
+[alias]
+	l = log --graph --oneline --all
+[credential "https://github.com"]
+	helper =
+	helper = !/home/hhamed/.nix-profile/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper =
+	helper = !/home/hhamed/.nix-profile/bin/gh auth git-credential
