@@ -126,8 +126,6 @@ which atuin > /dev/null && eval "$(atuin init bash)"
 
 ### hhamed
 
-eval "$(direnv hook bash)"
-
 # Init
 set -o vi
 PS1=" \$ "
@@ -159,9 +157,5 @@ shopt -s histappend
 
 alias vim="nvim"
 export PATH="${PATH}:/home/${USER}/go/bin:/home/${USER}/.local/bin"
-
-. "$HOME/.atuin/bin/env"
-
-. "$HOME/.cargo/env"
 
 alias ssh-cloud="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null"
