@@ -1,5 +1,5 @@
 -- All plugins have lazy=true by default,to load a plugin on startup just lazy=false
--- 
+--
 -- List of all default plugins & their definitions
 local default_plugins = {
 
@@ -343,7 +343,80 @@ local default_plugins = {
     keys = {
         { "<leader>wm", function() require("maximize").toggle() end, desc = "Toggle Maximize" },
     },
-  }
+  },
+    -- nvim-dap for debugging
+  { "mfussenegger/nvim-dap" },
+
+  -- Mason integration with nvim-dap
+  {
+    "jay-babu/mason-nvim-dap.nvim",
+    dependencies = { "williamboman/mason.nvim", "mfussenegger/nvim-dap" },
+    config = function()
+      require("mason-nvim-dap").setup({
+        ensure_installed = { "python" }, -- Automatically install debugpy
+        automatic_setup = true, -- Automatically configure installed adapters
+      })
+    end,
+  },
+
+  -- nvim-dap-python for Python-specific setup
+  {
+    "mfussenegger/nvim-dap-python",
+    config = function()
+      local mason_path = vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python"
+      require("dap-python").setup(mason_path)
+    end,
+  },
+  {
+    "rcarriga/nvim-dap-ui",
+    dependencies = {
+      "mfussenegger/nvim-dap",
+      "nvim-neotest/nvim-nio", -- Add this dependency
+    },
+    config = function()
+      local dap, dapui = require("dap"), require("dapui")
+      dapui.setup()
+
+      -- Automatically open/close UI during debugging sessions
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close()
+      end
+    end,
+  },
+  {
+    "simrat39/rust-tools.nvim",
+    ft = { "rust", "rs" }, -- Load only for Rust files
+    dependencies = { "neovim/nvim-lspconfig", "williamboman/mason.nvim" },
+    config = function()
+      local rust_tools = require("rust-tools")
+
+      rust_tools.setup({
+        server = {
+          -- Override the default LSP setup for rust_analyzer
+          on_attach = function(client, bufnr)
+            -- Your on_attach function or call the existing one
+            require("plugins.configs.lspconfig").on_attach(client, bufnr)
+          end,
+          settings = {
+            ["rust-analyzer"] = {
+              cargo = {
+                allFeatures = true,
+              },
+              procMacro = {
+                enable = true,
+              },
+            },
+          },
+        },
+      })
+    end,
+  },
 }
 
 

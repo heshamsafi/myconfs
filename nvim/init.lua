@@ -28,6 +28,8 @@ opt.foldmethod = "expr"
 opt.foldexpr = "nvim_treesitter#foldexpr()"
 opt.foldlevel = 99 -- disable folds on start
 
+vim.opt.relativenumber = true
+
 vim.api.nvim_set_keymap('n', '<leader>lf', ":lua require('telescope.builtin').live_grep({ additional_args = function() return { '-F' } end })<CR>", { noremap = true, silent = true })
 
 -- Add keybinding for live_grep_args
@@ -48,3 +50,17 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     vim.fn.setpos(".", save_cursor) -- Restore cursor position
   end,
 })
+
+require("dap-python").setup(vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python")
+
+local dap, dapui = require("dap"), require("dapui")
+
+-- Basic debugging controls
+vim.keymap.set('n', '<F5>', function() dap.continue() end, { desc = "Start/Continue Debugging" })
+vim.keymap.set('n', '<F10>', function() dap.step_over() end, { desc = "Step Over" })
+vim.keymap.set('n', '<F11>', function() dap.step_into() end, { desc = "Step Into" })
+vim.keymap.set('n', '<F12>', function() dap.step_out() end, { desc = "Step Out" })
+vim.keymap.set('n', '<leader>b', function() dap.toggle_breakpoint() end, { desc = "Toggle Breakpoint" })
+
+-- DAP UI controls
+vim.keymap.set('n', '<leader>du', function() dapui.toggle() end, { desc = "Toggle DAP UI" })

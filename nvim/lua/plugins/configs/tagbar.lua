@@ -29,4 +29,28 @@ let g:tagbar_type_go = {
 	\ 'ctagsbin'  : 'gotags',
 	\ 'ctagsargs' : '-sort -silent'
 \ }
+let g:tagbar_type_rust = {
+    \ 'ctagstype' : 'rust',
+    \ 'kinds' : [
+        \ 'T:types',
+        \ 'f:functions',
+        \ 'g:enumerations',
+        \ 's:structures',
+        \ 'm:modules',
+        \ 'c:constants',
+        \ 't:traits',
+        \ 'i:trait implementations',
+    \ ],
+    \ 'sro': '::',
+    \ 'kind2scope' : {
+        \ 'm': 'module',
+        \ 's': 'struct',
+        \ 'i': 'interface',
+    \ },
+    \ 'scope2kind' : {
+        \ 'module': 'm',
+        \ 'struct': 's',
+        \ 'interface': 'i',
+    \ },
+\ }
 ]])
